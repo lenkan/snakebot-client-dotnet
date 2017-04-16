@@ -1,27 +1,40 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Cygni.Snake.Client;
 
 namespace Cygni.Snake.SampleBot
 {
     public class RandomFreeDirectionSnakeBot : SnakeBot
     {
-        public RandomFreeDirectionSnakeBot() : base((string) "DotNetRandom")
+        private readonly Random _random = new Random();
+
+        public RandomFreeDirectionSnakeBot() : base("DotNetRandom")
         {
         }
 
-        public override Direction GetNextMove(Map map)
+        private IEnumerable<Direction> GetFreeDirections(Map map)
         {
-            foreach(Direction direction in Enum.GetValues(typeof(Direction)))
+            var freeDirections = new List<Direction>();
+            foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
                 var newHeadPosition = map.MySnake.HeadPosition.GetDestination(direction);
                 if (!map.IsObstace(newHeadPosition) && !map.IsSnake(newHeadPosition) && newHeadPosition.IsInsideMap(map.Width, map.Height))
                 {
-                    return direction;
+                    freeDirections.Add(direction);
                 }
             }
+            return freeDirections;
+        }
 
-            // Fall back value
-            return Direction.Down;
+        public override Direction GetNextMove(Map map)
+        {
+            var freeDirections = GetFreeDirections(map).ToList();
+
+            if (!freeDirections.Any())
+                return Direction.Down;
+
+            return freeDirections[_random.Next(0, freeDirections.Count - 1)];
         }
     }
 }
