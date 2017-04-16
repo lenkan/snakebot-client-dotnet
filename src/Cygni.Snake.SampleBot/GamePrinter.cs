@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,6 +70,16 @@ namespace Cygni.Snake.SampleBot
                 lock (Console.Out)
                 {
                     Console.WriteLine($"The game can be viewed at '{url}'.");
+                    Console.WriteLine("Open? (Y/N): ");
+                    var answer = Console.ReadLine().ToUpper();
+                    if (answer == "Y")
+                    {
+                        Process.Start(new ProcessStartInfo
+                        {
+                            FileName = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+                            Arguments = url
+                        });
+                    }
                 }
             });
         }
