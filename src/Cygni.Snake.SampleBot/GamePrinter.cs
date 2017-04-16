@@ -24,43 +24,43 @@ namespace Cygni.Snake.SampleBot
 
         public void OnGameEnd(Map map)
         {
-            Task.Run(() =>
-            {
-                lock (Console.Out)
-                {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("Game ended");
-                }
-            });
+            //Task.Run(() =>
+            //{
+            //    lock (Console.Out)
+            //    {
+            //        Console.ForegroundColor = ConsoleColor.White;
+            //        Console.WriteLine("Game ended");
+            //    }
+            //});
         }
 
         public void OnSnakeDied(string reason, string snakeId)
         {
-            Task.Run(() =>
-            {
-                lock (Console.Out)
-                {
-                    Console.ForegroundColor = PlayerColors.GetColor(snakeId);
-                    Console.WriteLine($"Snake '{snakeId}' died due to: {reason}");
-                }
-            });
+            //Task.Run(() =>
+            //{
+            //    lock (Console.Out)
+            //    {
+            //        Console.ForegroundColor = PlayerColors.GetColor(snakeId);
+            //        Console.WriteLine($"Snake '{snakeId}' died due to: {reason}");
+            //    }
+            //});
         }
 
         public void OnUpdate(Map map)
         {
-            Task.Run(() =>
-            {
-                lock (Console.Out)
-                {
-                    foreach (var snake in map.Snakes.OrderByDescending(s => s.Points))
-                    {
-                        Console.ForegroundColor = PlayerColors.GetColor(snake.Id);
-                        string state = snake.IsAlive ? "(alive)" : "(dead)";
-                        Console.WriteLine($"{snake.Name}: {snake.Points} pts {state}");
-                    }
-                    PrintMap(map);
-                }
-            });
+            //Task.Run(() =>
+            //{
+            //    lock (Console.Out)
+            //    {
+            //        foreach (var snake in map.Snakes.OrderByDescending(s => s.Points))
+            //        {
+            //            Console.ForegroundColor = PlayerColors.GetColor(snake.Id);
+            //            string state = snake.IsAlive ? "(alive)" : "(dead)";
+            //            Console.WriteLine($"{snake.Name}: {snake.Points} pts {state}");
+            //        }
+            //        PrintMap(map);
+            //    }
+            //});
         }
 
         public void OnGameLink(string url)
