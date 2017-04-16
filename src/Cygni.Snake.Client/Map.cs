@@ -82,6 +82,11 @@ namespace Cygni.Snake.Client
             return IsFood(target) ? DirectionalResult.Points : DirectionalResult.Nothing;
         }
 
+        public bool IsCoordinateInsideMap(MapCoordinate coordinate)
+        {
+            return coordinate.IsInsideMap(Width, Height);
+        }
+
         public bool IsObstace(MapCoordinate coordinate)
         {
             return ObstaclePositions.Contains(coordinate);
