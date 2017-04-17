@@ -8,7 +8,7 @@ namespace Cygni.Snake.Client
         /// Gets or sets the maximum number of players in a game.
         /// </summary> 
         [JsonProperty("maxNoofPlayers")]
-        public int MaxNoofPlayers { get; set; } = 5;
+        public int MaxNoofPlayers { get; set; } = 6;
 
         /// <summary>
         /// Gets or sets the starting length of a snake.
@@ -27,7 +27,7 @@ namespace Cygni.Snake.Client
         /// Gets or sets a value indicating if there will be randomly placed obstacles in the world.
         /// </summary>
         [JsonProperty("obstaclesEnabled")]
-        public bool ObstaclesEnabled { get; set; } = false;
+        public bool ObstaclesEnabled { get; set; } = true;
 
         /// <summary>
         /// Gets or sets a value indicating if randomly placed snake-food is enabled.

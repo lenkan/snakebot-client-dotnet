@@ -74,7 +74,7 @@ namespace Cygni.Snake.Client
             var myHead = mySnake.Positions.First();
             var target = myHead.GetDestination(dir);
 
-            if (IsSnake(target) || IsObstace(target) || !target.IsInsideMap(Width, Height))
+            if (IsSnake(target) || IsObstacle(target) || !target.IsInsideMap(Width, Height))
             {
                 return DirectionalResult.Death;
             }
@@ -87,7 +87,7 @@ namespace Cygni.Snake.Client
             return coordinate.IsInsideMap(Width, Height);
         }
 
-        public bool IsObstace(MapCoordinate coordinate)
+        public bool IsObstacle(MapCoordinate coordinate)
         {
             return ObstaclePositions.Contains(coordinate);
         }

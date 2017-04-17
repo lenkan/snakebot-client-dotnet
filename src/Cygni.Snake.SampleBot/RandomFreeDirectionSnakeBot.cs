@@ -29,11 +29,11 @@ namespace Cygni.Snake.SampleBot
 
         public bool IsPositionSafe(Map map, MapCoordinate position)
         {
-            if (!map.IsObstace(position) && !map.IsSnake(position) && position.IsInsideMap(map.Width, map.Height))
+            if (map.IsObstacle(position) || map.IsSnake(position) || !position.IsInsideMap(map.Width, map.Height))
                 return false;
 
-            // Check if other snakes may occupy this position in the next tick:
-            return map.SnakeHeads.Except(new[] {map.MySnake.HeadPosition}).Any(x => x.GetManhattanDistanceTo(position) == 1);
+            // Ensure other snakes cannot occupy same position next tick
+            return map.SnakeHeads.Except(new[] {map.MySnake.HeadPosition}).All(x => x.GetManhattanDistanceTo(position) > 1);
         }
 
         public override Direction GetNextMove(Map map)

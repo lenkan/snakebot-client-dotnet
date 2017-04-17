@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Cygni.Snake.Client;
 
 namespace Cygni.Snake.SampleBot
@@ -8,9 +10,12 @@ namespace Cygni.Snake.SampleBot
         public static void Main(string[] args)
         {
             var client = SnakeClient.Connect(new Uri("ws://snake.cygni.se:80/training"), new GamePrinter());
-            client.Start(new MySnakeBot("dotnetSnake")
+            client.Start(new MySnakeBot("DotNet")
             {
                 AutoStart = false
+            }, new GameSettings
+            {
+                MaxNoofPlayers = 6
             });
             Console.ReadLine();
         }

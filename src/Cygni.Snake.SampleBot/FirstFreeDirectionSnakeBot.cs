@@ -14,7 +14,7 @@ namespace Cygni.Snake.SampleBot
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
                 var newHeadPosition = map.MySnake.HeadPosition.GetDestination(direction);
-                if (!map.IsObstace(newHeadPosition) && !map.IsSnake(newHeadPosition) && newHeadPosition.IsInsideMap(map.Width, map.Height))
+                if (!map.IsObstacle(newHeadPosition) && !map.IsSnake(newHeadPosition) && newHeadPosition.IsInsideMap(map.Width, map.Height))
                 {
                     return direction;
                 }
