@@ -19,12 +19,21 @@ namespace Cygni.Snake.SampleBot
             foreach (Direction direction in Enum.GetValues(typeof(Direction)))
             {
                 var newHeadPosition = map.MySnake.HeadPosition.GetDestination(direction);
-                if (!map.IsObstace(newHeadPosition) && !map.IsSnake(newHeadPosition) && newHeadPosition.IsInsideMap(map.Width, map.Height))
+                if (IsPositionSafe(map, newHeadPosition))
                 {
                     freeDirections.Add(direction);
                 }
             }
             return freeDirections;
+        }
+
+        public bool IsPositionSafe(Map map, MapCoordinate position)
+        {
+            if (!map.IsObstace(position) && !map.IsSnake(position) && position.IsInsideMap(map.Width, map.Height))
+                return false;
+
+            // Check if other snakes may occupy this position in the next tick:
+            return map.SnakeHeads.Except(new[] {map.MySnake.HeadPosition}).Any(x => x.GetManhattanDistanceTo(position) == 1);
         }
 
         public override Direction GetNextMove(Map map)
