@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using Cygni.Snake.Client;
 
 namespace Cygni.Snake.SampleBot
@@ -27,17 +28,18 @@ namespace Cygni.Snake.SampleBot
             }
         }
 
-        public int GetNumberOfObstaclesAroundCoordinate(Map map, MapCoordinate coordinate)
+        public int GetDangerForCoordinate(Map map, MapCoordinate coordinate)
         {
-            int numberOfObstacles = 0;
-            foreach (var surroundingCoordinate in GetSurroundingCoordinates(coordinate, 5))
+            int dangerRating = IsCoordinateSafe(map, coordinate) ? 0 : 100;
+            foreach (var surroundingCoordinate in GetSurroundingCoordinates(coordinate, 5).Except(new []{coordinate}))
             {
-                if (!IsCoordinateSafe(map, surroundingCoordinate))
-                {
-                    numberOfObstacles = numberOfObstacles + 1;
-                }
+                int distance = coordinate.GetManhattanDistanceTo(surroundingCoordinate);
+                dangerRating += 5 * (map.IsSnake(surroundingCoordinate) ? 1 : 0) / distance;
+                dangerRating += 5 * (map.SnakeHeads.Except(new []{map.MySnake.HeadPosition}).Contains(surroundingCoordinate) ? 1 : 0) / distance;
+                dangerRating += 2 * (map.IsObstacle(surroundingCoordinate) ? 1 : 0) / distance;
+                dangerRating += 2 * (!map.IsCoordinateInsideMap(surroundingCoordinate) ? 1 : 0) / distance;
             }
-            return numberOfObstacles;
+            return dangerRating;
         }
 
         private  bool IsCoordinateSafe(Map map, MapCoordinate coordinate)
@@ -45,20 +47,16 @@ namespace Cygni.Snake.SampleBot
             return !map.IsObstacle(coordinate) && !map.IsSnake(coordinate) && map.IsCoordinateInsideMap(coordinate);
         }
 
-        public int GetWeightForDirection(Map map, Direction direction)
+        public int GetDangerForDirection(Map map, Direction direction)
         {
             var destination = map.MySnake.HeadPosition.GetDestination(direction);
-            if (!IsCoordinateSafe(map, destination))
-            {
-                return 100;
-            }
-            return GetNumberOfObstaclesAroundCoordinate(map, destination);
+            return GetDangerForCoordinate(map, destination);
         }
 
         public override Direction GetNextMove(Map map)
         {
             var directionPoints = Enum.GetValues(typeof(Direction)).Cast<Direction>()
-                .Select(dir => new {Points = GetWeightForDirection(map, dir), Direction = dir})
+                .Select(dir => new {Points = GetDangerForDirection(map, dir), Direction = dir})
                 .OrderBy(x => x.Points)
                 .FirstOrDefault();
             return directionPoints.Direction;
